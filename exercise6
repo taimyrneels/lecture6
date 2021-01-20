@@ -1,0 +1,82 @@
+## Create a new database called college
+## Create tables and insert data based on college.sql
+## Make sure you have sufficient rights on this database
+## Execute the following queries and save both your query and the results in a file called exercise6.txt and add this file ## to your repository
+
+mysql -u root -p
+create database college2;
+grant all privileges on college.* to "taimyr"@"localhost";
+
+cat college.sql | mysql college2
+
+## Retrieve the name, city and grade point average (GPA) of students, greater than or equal to 3.7
+
+select concat(stdFirstName, " ", stdLastName ) as name, stdCity, stdGPA from student where stdGPA >= 3.7;
+
+## List the name and hiring date of faculty hired in 1999 or 2000
+
+select concat(FacFirstName, " " , FacLastName) as name, FacHireDate from faculty where FacHireDate like "%1999%" or FacHireDate like "%2000%";
+
+## List the offer number, course number and faculty Social Security number for course offerings scheduled in fall 2005 or ## winter 2006
+
+select OfferNo, CourseNo, FacSSN, OffYear, OffTerm  from offering where (OffTerm = "FALL" and OffYear = "2005") or (OffT
+erm = "WINTER" and OffYear = "2006");
+
+## List the offering number, course number, days and time of offerings containing the words 'database' or 'programming' in ## the course description and taught in spring 2006.
+
+select course.CourseNo, course.crsDesc, offering.OfferNo, offering.OffTime, offering.OffDays from course join offering on course.CourseNo=offering.CourseNo where course.crsDesc like "%database%" or course.crsDesc like "%programming%";
+
+## List the offer number, course number and name of the instructor of IS course offerings scheduled in fall 2005 taught by assistant professors
+
+select offering.OfferNo, offering.CourseNo, concat(FacFirstName, " ", FacLastName) as name, FacRank, offering.OffTerm, offering.OffYear from offering join faculty on offering.FacSSN=faculty.FacSSN where FacRank = "ASST" and CourseNo like "%IS%" and offering.OffTerm="FALL" and offering.OffYear ="2005";
+
+## Summarize the averageGPA of students by major.
+
+select avg(stdGPA), stdMajor from student group by stdMajor;
+
+## Summarize the number of offerings and unique courses by year.
+
+select count(OfferNo), CourseNo, OffYear from offering group by CourseNo;
+
+## Summarize the average GPA of upper-division (junior or senior) students by major.
+## Only list the major with average GPA greater than 3.1.
+
+select avg(stdGPA), StdMajor, stdClass from student where stdClass = "JR" or stdClass = "FR"  group by stdMajor having avg(stdGPA) >= 3.1;
+
+## Summarize the minimum and maximum GPA of students by major and class.
+
+select min(stdGPA), max(stdGPA), stdMajor, stdClass from student group by stdClass ;
+
+## Summarize the number of IS course offering by course description.
+
+ select CourseNo, crsDesc from course where CourseNo like '%IS%' group by crsDesc;
+
+## List the GPA, name, city and state of juniors, lowest GPA first.
+
+select stdGPA, concat(stdFirstName, " ", stdLastName) as name, stdCity, stdState from student where stdClass = "JR" order by stdGPA asc;
+
+## List the unique city and state combination in the Faculty table.
+
+select concat(FacCity, " ", FacState ) as address from faculty group by address;
+
+##List the student name, offering number and grade of students who have a grade >=3.5 in a course offering.
+
+select concat(stdFirstName, " ", stdLastName) as name, stdGPA, offering.OfferNo from student join enrollment on student.StdSSN= enrollment.StdSSN join offering on enrollment.OfferNo=offering.OfferNo where stdGPA>= 3.5;
+
+## List the names of students (without duplicates) who have grades >= 3.5 in a course offering.
+
+select concat(stdFirstName, " ", stdLastName) as name, stdGPA, offering.OfferNo from student join enrollment on student.StdSSN= enrollment.StdSSN join offering on enrollment.OfferNo=offering.OfferNo where stdGPA>= 3.5 group by name;
+
+## List Bob Norbert's course schedule in spring 2006. For each course, list the offering number, course number, days, location, time and faculty name.
+
+select concat(stdFirstName , " ", stdLastName) as name, offering.OffTerm, offering.OffYear, offering.CourseNo, offering.OfferNo, course.crsDesc, OffTime, OffDays, faculty.FacDept, concat(FacCity, " ",FacState) as location from student join enrollment on student.stdSSN=enrollment.StdSSN join offering on enrollment.OfferNo=offering.OfferNo join course on offering.CourseNo=course.CourseNo join faculty on offering.FacSSN=faculty.FacSSN where Offterm="SPRING" and OffYear="2006" and stdLastName = "NORBERT";
+
+
+
+
+
+
+
+
+
+
