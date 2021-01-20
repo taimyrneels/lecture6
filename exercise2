@@ -1,0 +1,27 @@
+## normalize the following data to BCNF
+# describe every step of the process and save the results for every normalization step to a file calles exercise2
+
+UNF:
+
+Everything(staffNO., DentistName, PatientNO, PatientName, appointment[date, time], surgeryNO)
+
+1NF: Defining the primary keys.
+
+Everything(*staffNO.*, DentistName, *PatientNO*, PatientName, appointment[*date*, *time*], surgeryNO)
+
+2NF: splitting the table, no partial dependencies.
+
+staff(*staffNO*, DentistName)
+patient(*PatientNO*,PatientName)
+mean(*staffNO*,*patientNO*,*appointment_date*,*time*,surgeryNO)
+
+3NF: 
+
+staff(*staffNO*, DentistName)
+patient(*PatientNO*,PatientName)
+mean(*staffNO*,*patientNO*,*appointment_date*,*time*,surgeryNO)
+
+
+BCNF = 3NF 
+
+
