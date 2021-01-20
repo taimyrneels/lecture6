@@ -1,0 +1,50 @@
+## Import the restaurant information from restaurants.json
+
+mongoimport --d rest --file  restaurants.json
+
+## Execute following queries and save both your query and the results in a file called exercise7.txt and add this file to your repository.
+
+## Display the fields restaurant_id, name, borough and cuisine for all the documents in the collection restaurant.
+
+ db.restaurants.find({},{"_id":1, "name":1, "borough":1,"cuisine":1})
+
+## Display the second group of 5 restaurants which are in the borough Bronx.
+
+db.restaurants.find({"borough":"Bronx"}).skip(5).limit(5)
+
+## Find the restaurants who achieved a score more than 90.
+
+db.restaurants.find({"grades.score":{$gt:90}})
+
+## Find the restaurants that do not prepare any cuisine of 'American' and their grade score more than 70 and latitude less than -65.754168.
+
+db.restaurants.find({"grades.score":{$gt:70}, "cuisine":{$ne:"American"},"address.coord.0":{$lt:-65}})
+
+## Find the restaurants which belong to the borough Bronx and prepared either American or Chinese dish.
+
+db.restaurants.find({"borough":"Bronx", "cuisine":{$in:["American","Chinese"]}})
+
+## Find the restaurant Id, name, borough and cuisine for those restaurants which are not belonging to the borough Staten Island or Queens or Bronxor Brooklyn.
+
+db.restaurants.find({"borough":{$nin:["Staten Island","Queens", "Bronxer Brooklyn"]}},{"_id":1, "name":1, "borough":1, "cuisine":1})
+
+## Find the restaurant Id, name, borough and cuisine for those restaurants which achieved a score which is not more than 10.
+
+ db.restaurants.find({"grades.score":{$lte:10}},{"_id":1, "name":1, "borough":1, "cuisine":1, "grades.score":1})
+
+## Find the restaurant Id, name, and grades for those restaurants which achieved a grade of "A" and scored 11 on an ISODate "2014-08-11T00:00:00Z" among many of survey dates.
+
+db.restaurants.find({"grades.grade":{$eq:"A"}, "grades.score":{$eq:11}, "ISODate":{$eq:"2014-08-11T00:00:00Z"}},{"_id":1, "name":1, "borough":1, "cuisine":1, "grades":1})
+
+## Give a list of all restaurants, ordered by cuisine alphabetically and borough in reverse alphabetical order
+
+db.restaurants.find({},{"name":1,"cuisine":1,"borough":1}).sort({cuisine:1}).sort({borough:-1})
+
+## Write a query to know whether all the addresses contain a street or not.
+
+> db.restaurants.find({"address.street":{$exists:0}})
+> db.restaurants.find({"address.street":{$exists:0}}).count()
+0
+
+there are no addresses without streets 
+
