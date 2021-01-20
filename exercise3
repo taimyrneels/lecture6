@@ -1,0 +1,22 @@
+## Describe and illustrate the process of normalization for the following data to 1NF,2NF,3NF and BCNF.
+## Save the results for every normalization step in a file called exercise3.txt
+## Add it to the repository with a fitting commit message.
+
+UNF:
+
+maindb(patientNO, patientName, WardNO, WArdName, DrugsNO,DrugsNa,description,dosage, method, startdate, units/day, finishDate)
+
+1NF: 
+
+maindb(*patientNO*, patientName, *WardNO*, WArdName, *DrugsNO*, DrugsNa, description, dosage, method, *startdate*, units/day, finishDate)
+
+2NF:
+
+patient(*patientNO*,patientName)
+ward(*WardNO*, WardName)
+drugs(*DrugsNO*,drugsname, description, dosage, method)
+main(*patientNO*,*wardNO*,*drugsno*, *startdate*, units/dag, finishdate)
+
+2NF = 3NF = BCNF 
+
+
