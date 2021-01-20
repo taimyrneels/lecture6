@@ -1,0 +1,70 @@
+## Create a new database called vacation
+## Create tables and insert data based on vacation.sql
+## Make sure you have rights to the database with a non-root user
+## Execute following queries and save both the query and the result in a file called exercise5.txt and add this file to your repository
+
+mysql -u root -p
+create database vacation;
+grant all privileges on vacation.* to "taimyr"@"localhost"
+
+cd Downloads
+cat vacation.sql | mysql vacation2
+
+## List the names and addresses of all guests in London, alphabetically ordered by name.
+
+## List all double or family rooms with a price below £40.00 per night, cheapest first.
+
+select guestname, guestaddress from guest where guestaddress like "%London%" order by guestname;
+
+
+## List the bookings for which no date_to has been specified.
+
+select * from booking where dateto is NULL;
+
+## What is the average price of a room?
+
+select avg(price) from room;
+
+## What is the total revenue per night from all double rooms?
+
+select sum(price) from room where type ="double";
+
+## How many different guests have made bookings for August?
+
+select * from booking where datefrom like "%08%" or dateto like "%08";
+
+## List the price and type of all rooms at the The Tower Hotel.
+
+select hotelname, room.type, room.price from hotel join room on hotel.hotelno=room.hotelno where hotelname = "The Tower Hotel";
+
+## List all guests currently staying at the The Tower Hotel.
+
+select guest.guestno, guest.guestname, booking.hotelno, hotel.hotelname, dateto, datefrom  from booking join guest on booking.guestno=guest.guestno join hotel on booking.hotelno=hotel.hotelno where hotelname="The Tower Hotel" and "2021-01-20" between dateto and datefrom;
+
+## List the details of all rooms at the The Tower Hotel, including the name of the guest staying in the room, if the room is occupied.
+
+select room.roomno, hotelname, room.type, room.price, guest.guestname from room join booking on room.roomno=booking.roomno join hotel on booking.hotelno=hotel.hotelno join guest on booking.guestno=guest.guestno where hotelname = "The Tower Hotel";
+
+## What is the total income from bookings for the The Tower Hotel today?
+
+there are no bookings today. 
+
+## List the rooms that are currently unoccupied at the The Tower Hotel.
+
+all the rooms 
+
+## What is the lost income from unoccupied rooms at the The Tower Hotel?
+
+select sum(price) from room join booking on room.roomno=booking.roomno join hotel on hotel.hotelno=booking.hotelno where hotelname="The Tower Hotel";
+
+## List the number of rooms in each hotel in London.
+
+select count(roomno) from booking join hotel on booking.hotelno=hotel.hotelno where city="London";
+
+## What is the most booked room type for each hotel in London?
+
+select count(booking.roomno), room.type from room join booking on room.roomno=booking.roomno join hotel on booking.hotelno=hotel.hotelno where hotel.city="London" group by room.type order by count(booking.roomno) desc;
+
+## Update the price of all rooms by 5%.
+
+select *, round(price + (price/100*5)) as updated_price from room;
